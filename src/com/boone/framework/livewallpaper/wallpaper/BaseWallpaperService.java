@@ -9,6 +9,7 @@ import android.view.SurfaceHolder;
 import com.boone.framework.livewallpaper.renderer.Renderer;
 import com.boone.framework.livewallpaper.world.World;
 
+//Extend this class to build a quick live wallpaper impl
 public abstract class BaseWallpaperService extends WallpaperService {
 
 	protected abstract AbstractWallpaperEngine getEngine();
@@ -17,6 +18,7 @@ public abstract class BaseWallpaperService extends WallpaperService {
 		return getEngine();
 	}
 
+	//Base class for the wallpaper engine.
 	public abstract class AbstractWallpaperEngine extends Engine implements WallpaperEngine {
 
 		private Handler mHandler = new Handler();
