@@ -1,8 +1,13 @@
-package com.boone.shiftygrid;
+package com.boone.reshift;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.boone.framework.livewallpaper.renderer.Renderer;
+import com.boone.framework.livewallpaper.wallpaper.WallpaperEngine;
+import com.boone.framework.livewallpaper.world.World;
+import com.boone.shiftygrid.ShiftyBox;
 
 
 public class ShiftyWorld implements World {

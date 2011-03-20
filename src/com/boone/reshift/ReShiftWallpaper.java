@@ -1,4 +1,8 @@
-package com.boone.shiftygrid;
+package com.boone.reshift;
+
+import com.boone.framework.livewallpaper.renderer.Renderer;
+import com.boone.framework.livewallpaper.wallpaper.WallpaperEngine;
+import com.boone.framework.livewallpaper.world.World;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;

@@ -1,4 +1,7 @@
-package com.boone.shiftygrid;
+package com.boone.framework.livewallpaper.world;
+
+import com.boone.framework.livewallpaper.renderer.Renderer;
+import com.boone.framework.livewallpaper.wallpaper.WallpaperEngine;
 
 
 public interface World {

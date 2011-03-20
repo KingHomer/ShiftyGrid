@@ -1,4 +1,4 @@
-package com.boone.shiftygrid;
+package com.boone.framework.livewallpaper.wallpaper;
 
 public interface WallpaperEngine {
 	
