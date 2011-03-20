@@ -10,6 +10,7 @@ public class ReShiftWallpaperService extends BaseWallpaperService{
 		return new ReShiftEngine();
 	}
 	
+	//ShiftyGrid live wallpaper.
 	public class ReShiftEngine extends AbstractWallpaperEngine {
 
 		@Override public World createWorld() {

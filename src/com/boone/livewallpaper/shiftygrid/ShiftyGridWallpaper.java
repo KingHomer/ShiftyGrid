@@ -30,6 +30,7 @@ public class ShiftyGridWallpaper extends WallpaperService {
 		return new ShiftyGridEngine();
 	}
 
+	//First write of wallpaper.
 	class ShiftyGridEngine extends Engine{
 		private Handler mHandler = new Handler();
 		
