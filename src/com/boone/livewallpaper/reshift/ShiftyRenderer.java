@@ -3,31 +3,26 @@ package com.boone.livewallpaper.reshift;
 import java.util.Iterator;
 import java.util.List;
 
-import com.boone.framework.livewallpaper.renderer.Renderer;
-import com.boone.framework.livewallpaper.wallpaper.WallpaperEngine;
-import com.boone.framework.livewallpaper.world.World;
-import com.boone.livewallpaper.shiftygrid.ShiftyBox;
-
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
+
+import com.boone.framework.livewallpaper.renderer.Renderer;
+import com.boone.framework.livewallpaper.wallpaper.WallpaperEngine;
+import com.boone.livewallpaper.reshift.ReShiftWallpaperService.ReShiftEngine;
+import com.boone.livewallpaper.shiftygrid.ShiftyBox;
 
 public class ShiftyRenderer implements Renderer {
 
 	Paint mPaint;
 
+	//TODO clean this up
 	ShiftyWorld world;
-	WallpaperEngine engine;
-
-	public ShiftyRenderer() {
-		world = (ShiftyWorld) getWorld();
-		engine = world.getEngine();
-	}
-
-	@Override public World getWorld() {
-		// TODO Auto-generated method stub
-		// this is trash
-		return null;
+	ReShiftEngine engine;
+	
+	@Override public void onCreate(WallpaperEngine engine) {
+		this.engine = (ReShiftEngine) engine;
+		world = (ShiftyWorld) engine.getWorld();
 	}
 
 	@Override public void render(Canvas c) {

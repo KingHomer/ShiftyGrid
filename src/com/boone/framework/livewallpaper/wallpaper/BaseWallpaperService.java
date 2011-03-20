@@ -2,6 +2,7 @@ package com.boone.framework.livewallpaper.wallpaper;
 
 import android.graphics.Canvas;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.service.wallpaper.WallpaperService;
 import android.view.SurfaceHolder;
 
@@ -11,12 +12,11 @@ import com.boone.framework.livewallpaper.world.World;
 public abstract class BaseWallpaperService extends WallpaperService {
 
 	protected abstract AbstractWallpaperEngine getEngine();
-	
-	@Override
-	public Engine onCreateEngine() {
+
+	@Override public Engine onCreateEngine() {
 		return getEngine();
 	}
-	
+
 	public abstract class AbstractWallpaperEngine extends Engine implements WallpaperEngine {
 
 		private Handler mHandler = new Handler();
@@ -36,70 +36,82 @@ public abstract class BaseWallpaperService extends WallpaperService {
 		private float mOffsetX;
 
 		private boolean mVisible;
-		
+
 		public AbstractWallpaperEngine() {
 			mWorld = getWorld();
 			mRenderer = getRenderer();
 		}
+
+		public abstract World createWorld();
 		
-		public abstract World getWorld();
-		
-		public abstract Renderer getRenderer();
+		public abstract Renderer createRenderer();
 
 		private Runnable engineRunner = new Runnable() {
-			@Override
-			public void run() {
-				mWorld.step();
-				// drawFrame();
+			@Override public void run() {
+				queueStep();
+				drawFrame();
 			}
 		};
-			
+
+		private void queueStep() {
+			mElapsedTime = SystemClock.elapsedRealtime() - mStartTime;
+
+			mWorld.step();
+			mHandler.removeCallbacks(engineRunner);
+			if (mVisible) {
+				mHandler.postDelayed(engineRunner, 40); // 1000 / 25
+			}
+		}
+
 		@Override public void onCreate(SurfaceHolder holder) {
 			super.onCreate(holder);
-			
+
 			mScreenHeight = getDesiredMinimumHeight();
 			mScreenWidth = getDesiredMinimumWidth();
-			
-			setTouchEventsEnabled(true); //user set property.
-			
+
+			setTouchEventsEnabled(true); // user set property.
+
+			mStartTime = SystemClock.elapsedRealtime();
 			mWorld.onCreate(this);
+			mRenderer.onCreate(this);
 		}
-		
+
 		@Override public void onDestroy() {
 			super.onDestroy();
 			mHandler.removeCallbacks(engineRunner);
 			mWorld.onDestroy();
 		}
-		
+
 		@Override public void onSurfaceDestroyed(SurfaceHolder holder) {
 			super.onSurfaceDestroyed(holder);
 			mVisible = false;
 			mHandler.removeCallbacks(engineRunner);
 		}
-		
+
 		@Override public void onSurfaceChanged(SurfaceHolder holder, int format, int width, int height) {
 			super.onSurfaceChanged(holder, format, width, height);
-			//should world get this ?
+			// should world get this ?
 		}
-		
+
 		@Override public void onVisibilityChanged(boolean visible) {
 			mVisible = visible;
-			//maybe run a step
-			if(mVisible) {
+			// maybe run a step
+			if (mVisible) {
 				drawFrame();
 			}
 		}
-		
+
 		@Override public void onOffsetsChanged(float xOffset, float yOffsett, float xStep, float yStep, int xPixels, int yPixles) {
+			// does world need to see the change ?
 			mOffsetX = xPixels;
-			
+
 			mWorld.step();
 			drawFrame();
 		}
-		
+
 		public void drawFrame() {
 			final SurfaceHolder holder = getSurfaceHolder();
-			
+
 			Canvas c = null;
 			try {
 				c = holder.lockCanvas();
@@ -115,34 +127,42 @@ public abstract class BaseWallpaperService extends WallpaperService {
 				}
 			}
 		}
+		
+		@Override public World getWorld() {
+			if (mWorld == null) {
+				mWorld = createWorld();
+			}
+			return mWorld;
+		}
+		
+		@Override public Renderer getRenderer() {
+			if(mRenderer == null) {
+				mRenderer = createRenderer();
+			}
+			return mRenderer;
+		}
 
-		@Override
-		public long getStartTime() {
+		@Override public long getStartTime() {
 			return mStartTime;
 		}
 
-		@Override
-		public long getElapsedTime() {
+		@Override public long getElapsedTime() {
 			return mElapsedTime;
 		}
 
-		@Override
-		public long getLastDrawTime() {
+		@Override public long getLastDrawTime() {
 			return mLastDrawTime;
 		}
 
-		@Override
-		public float getScreenHeight() {
+		@Override public float getScreenHeight() {
 			return mScreenHeight;
 		}
 
-		@Override
-		public float getScreenOffset() {
+		@Override public float getScreenOffset() {
 			return mOffsetX;
 		}
 
-		@Override
-		public float getScreenWidth() {
+		@Override public float getScreenWidth() {
 			return mScreenWidth;
 		}
 	}

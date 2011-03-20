@@ -2,7 +2,6 @@ package com.boone.livewallpaper.reshift;
 
 import android.graphics.Canvas;
 import android.os.Handler;
-import android.os.SystemClock;
 import android.service.wallpaper.WallpaperService;
 import android.view.SurfaceHolder;
 
@@ -16,7 +15,7 @@ import com.boone.framework.livewallpaper.world.World;
 		return new ReShiftEngine();
 	}
 
-	private class ReShiftEngine extends Engine implements WallpaperEngine {
+	@Deprecated private class ReShiftEngine extends Engine implements WallpaperEngine {
 		// Thread handlers
 		private Handler mHandler = new Handler();
 
@@ -138,6 +137,16 @@ import com.boone.framework.livewallpaper.world.World;
 
 		@Override public float getScreenWidth() {
 			return mScreenWidth;
+		}
+
+		@Override public World getWorld() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override public Renderer getRenderer() {
+			// TODO Auto-generated method stub
+			return null;
 		}
 	}
 }

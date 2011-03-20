@@ -10,13 +10,13 @@ public class ReShiftWallpaperService extends BaseWallpaperService{
 		return new ReShiftEngine();
 	}
 	
-	private class ReShiftEngine extends AbstractWallpaperEngine {
+	public class ReShiftEngine extends AbstractWallpaperEngine {
 
-		@Override public World getWorld() {
+		@Override public World createWorld() {
 			return new ShiftyWorld();
 		}
 		
-		@Override public Renderer getRenderer() {
+		@Override public Renderer createRenderer() {
 			return new ShiftyRenderer();
 		}
 		

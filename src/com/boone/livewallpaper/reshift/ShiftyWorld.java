@@ -6,14 +6,12 @@ import java.util.Map;
 
 import com.boone.framework.livewallpaper.wallpaper.WallpaperEngine;
 import com.boone.framework.livewallpaper.world.World;
+import com.boone.livewallpaper.reshift.ReShiftWallpaperService.ReShiftEngine;
 import com.boone.livewallpaper.shiftygrid.ShiftyBox;
 
 public class ShiftyWorld implements World {
 
-	private ShiftyWorld instance;
-
-	// This needs to be set correctly
-	private WallpaperEngine engine;
+	private ReShiftEngine engine;
 
 	// grid instance
 	private Map<String, ShiftyBox> boxes;
@@ -23,26 +21,21 @@ public class ShiftyWorld implements World {
 	private float mGridHeight;
 	private float mGridWidth;
 
-	public World instance() {
-		if (instance == null) {
-			instance = new ShiftyWorld();
-		}
-		return instance;
-	}
-
 	public ShiftyWorld() {
 		// init
 		boxes = new HashMap<String, ShiftyBox>();
 	}
 
 	@Override public void onCreate(WallpaperEngine engine) {
-		this.engine = engine;
+		this.engine = (ReShiftEngine) engine;
 
-		mGridHeight = engine.getScreenHeight();
-		mGridWidth = 2 * engine.getScreenWidth();
+		//this needs to be elsewhere
+		mGridHeight = this.engine.getScreenHeight();
+		mGridWidth = 2 * this.engine.getScreenWidth();
 	}
 
 	@Override public void onDestroy() {
+		//need to clean house more.
 		boxes.clear();
 	}
 
@@ -52,11 +45,6 @@ public class ShiftyWorld implements World {
 	}
 
 	public List<ShiftyBox> getBoxes() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override public WallpaperEngine getEngine() {
 		// TODO Auto-generated method stub
 		return null;
 	}
