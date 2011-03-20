@@ -66,4 +66,10 @@ public class ShiftyWorld implements World {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public WallpaperEngine getEngine() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

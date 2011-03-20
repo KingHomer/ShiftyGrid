@@ -1,4 +1,4 @@
-package com.boone.reshift;
+package com.boone.framework.livewallpaper.wallpaper;
 
 import android.graphics.Canvas;
 import android.os.Handler;
@@ -6,53 +6,54 @@ import android.service.wallpaper.WallpaperService;
 import android.view.SurfaceHolder;
 
 import com.boone.framework.livewallpaper.renderer.Renderer;
-import com.boone.framework.livewallpaper.wallpaper.WallpaperEngine;
 import com.boone.framework.livewallpaper.world.World;
 
-@Deprecated
-public class ReShiftWallpaper extends WallpaperService{
+public abstract class BaseWallpaperService extends WallpaperService {
 
+	protected abstract AbstractWallpaperEngine getEngine();
+	
 	@Override
 	public Engine onCreateEngine() {
-		return new ReShiftEngine();
+		return getEngine();
 	}
 	
-	private class ReShiftEngine extends Engine implements WallpaperEngine{
-		//Thread handlers
+	public abstract class AbstractWallpaperEngine extends Engine implements WallpaperEngine {
+
 		private Handler mHandler = new Handler();
-		
-		//World time elapsed ..Move to world.
+
+		// World time elapsed ..Move to world.
 		private long mStartTime;
 		private long mElapsedTime;
 		private long mLastDrawTime;
-		
-		//World object
+
 		private World mWorld;
-		
-		//Renderer
+
 		private Renderer mRenderer;
-		
-		//Grid object ... member of world ?
-		
+
 		private float mScreenHeight;
 		private float mScreenWidth;
-		
+
 		private float mOffsetX;
-		
+
 		private boolean mVisible;
 		
-		private Runnable engineRunner = new Runnable() {
-			@Override public void run() {
-				mWorld.step();
-				drawFrame();
-			}
-		};
-		
-		public ReShiftEngine() {
-			//build world .. use factory or singleton instance.
-			
+		public AbstractWallpaperEngine() {
+			mWorld = getWorld();
+			mRenderer = getRenderer();
 		}
 		
+		public abstract World getWorld();
+		
+		public abstract Renderer getRenderer();
+
+		private Runnable engineRunner = new Runnable() {
+			@Override
+			public void run() {
+				mWorld.step();
+				// drawFrame();
+			}
+		};
+			
 		@Override public void onCreate(SurfaceHolder holder) {
 			super.onCreate(holder);
 			
