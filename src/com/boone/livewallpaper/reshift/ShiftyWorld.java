@@ -1,7 +1,7 @@
 package com.boone.livewallpaper.reshift;
 
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.boone.framework.livewallpaper.wallpaper.WallpaperEngine;
@@ -13,25 +13,26 @@ public class ShiftyWorld implements World {
 
 	private ReShiftEngine engine;
 
-	// grid instance
 	private Map<String, ShiftyBox> boxes;
+	
 	private int activeBoxCount;
+	private int maxNumBoxes;
 
 	// dimensions
 	private float mGridHeight;
 	private float mGridWidth;
+	private float boxSideLength;
+	
+	private long lastBoxBuildTime;
+	private long lastBoxShiftTime;
 
 	public ShiftyWorld() {
 		// init
-		boxes = new HashMap<String, ShiftyBox>();
 	}
 
 	@Override public void onCreate(WallpaperEngine engine) {
 		this.engine = (ReShiftEngine) engine;
-
-		//this needs to be elsewhere
-		mGridHeight = this.engine.getScreenHeight();
-		mGridWidth = 2 * this.engine.getScreenWidth();
+		initGrid();		
 	}
 
 	@Override public void onDestroy() {
@@ -40,12 +41,53 @@ public class ShiftyWorld implements World {
 	}
 
 	@Override public void step() {
-		// TODO Auto-generated method stub
-
+		/*
+		 * check time
+		 * if build time
+		 * 		build box
+		 * if shift time
+		 * 		shift box
+		 * 
+		 */
+	}
+	
+	private void initGrid() {
+		boxes = new HashMap<String, ShiftyBox>();
+		mGridHeight = this.engine.getScreenHeight();
+		mGridWidth = 2 * this.engine.getScreenWidth();
+		boxSideLength = gcd(mGridWidth, mGridHeight) / 2;
+		activeBoxCount = 0;
+		maxNumBoxes = findMaxBoxes();
 	}
 
-	public List<ShiftyBox> getBoxes() {
-		// TODO Auto-generated method stub
-		return null;
+	public Collection<ShiftyBox> getBoxes() {
+		return boxes.values();
+	}
+	
+	//Redo this method.
+	private int findMaxBoxes() {
+		int boxCount = 0;
+		
+		float bottom = boxSideLength;
+		float right;
+		while(bottom <= mGridHeight) {
+			right = boxSideLength;
+			while(right <= mGridWidth) {
+				right += boxSideLength;
+				
+				boxCount++;
+			}
+			bottom += boxSideLength;
+		}
+		
+		return boxCount;
+	}
+	
+	private float gcd(float a, float b) {
+		if (b == 0) {
+			return a; 
+		} else {
+			return gcd(b, a % b);
+		}
 	}
 }

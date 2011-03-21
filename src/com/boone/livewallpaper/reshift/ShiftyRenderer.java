@@ -20,6 +20,15 @@ public class ShiftyRenderer implements Renderer {
 	ShiftyWorld world;
 	ReShiftEngine engine;
 	
+	public ShiftyRenderer() {
+		mPaint = new Paint();
+		mPaint.setColor(0xffffffff);
+		mPaint.setAntiAlias(true);
+		mPaint.setStrokeWidth(2);
+		mPaint.setStrokeCap(Paint.Cap.ROUND);
+		mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+	}
+	
 	@Override public void onCreate(WallpaperEngine engine) {
 		this.engine = (ReShiftEngine) engine;
 		world = (ShiftyWorld) engine.getWorld();

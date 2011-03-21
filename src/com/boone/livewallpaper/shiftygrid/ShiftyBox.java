@@ -25,7 +25,6 @@ public class ShiftyBox {
 	private float topDelta;
 	private float bottomDelta;
 	
-	//Color dderrp
 	public int color;
 	private int alpha;
 	
@@ -95,7 +94,7 @@ public class ShiftyBox {
 //			neighborBox.right = origRight;
 //			neighborBox.top = origTop;
 //			neighborBox.bottom = origBottom;
-			//TODO Here is where the shift animation needs to go. derrrrr
+
 //			if(neighborBox == null){
 //				step = maxSteps;
 //				this.isAnimating = false;
