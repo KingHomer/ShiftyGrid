@@ -1,19 +1,21 @@
 package com.boone.livewallpaper.reshift;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Stack;
 
 import com.boone.framework.livewallpaper.wallpaper.WallpaperEngine;
 import com.boone.framework.livewallpaper.world.World;
 import com.boone.livewallpaper.reshift.ReShiftWallpaperService.ReShiftEngine;
-import com.boone.livewallpaper.shiftygrid.ShiftyBox;
+import com.boone.livewallpaper.reshift.grid.ShiftyBox;
 
 public class ShiftyWorld implements World {
 
 	private ReShiftEngine engine;
 
-	private Map<String, ShiftyBox> boxes;
+	//Changing this around
+	private Collection<ShiftyBox> activeBoxes;
+	private Stack<ShiftyBox> availableBoxes;
 	
 	private int activeBoxCount;
 	private int maxNumBoxes;
@@ -37,31 +39,41 @@ public class ShiftyWorld implements World {
 
 	@Override public void onDestroy() {
 		//need to clean house more.
-		boxes.clear();
+		availableBoxes.removeAllElements();
+		activeBoxes.clear();
 	}
 
 	@Override public void step() {
 		/*
 		 * check time
 		 * if build time
-		 * 		build box
+		 * 		if room available
+		 * 			build box
 		 * if shift time
-		 * 		shift box
+		 * 		if shiftable box available
+		 * 			shift box
 		 * 
 		 */
 	}
 	
 	private void initGrid() {
-		boxes = new HashMap<String, ShiftyBox>();
 		mGridHeight = this.engine.getScreenHeight();
 		mGridWidth = 2 * this.engine.getScreenWidth();
-		boxSideLength = gcd(mGridWidth, mGridHeight) / 2;
+		
 		activeBoxCount = 0;
+		boxSideLength = gcd(mGridWidth, mGridHeight) / 2;  //Change this to make the boxes much smaller
+		availableBoxes = new Stack<ShiftyBox>();
+		activeBoxes = new ArrayList<ShiftyBox>();
 		maxNumBoxes = findMaxBoxes();
+		
+		//redo
+		for(int x = 0; x < maxNumBoxes - 25; x++) {
+			availableBoxes.add(new ShiftyBox(boxSideLength));
+		}
 	}
 
 	public Collection<ShiftyBox> getBoxes() {
-		return boxes.values();
+		return activeBoxes;
 	}
 	
 	//Redo this method.
@@ -89,5 +101,14 @@ public class ShiftyWorld implements World {
 		} else {
 			return gcd(b, a % b);
 		}
+	}
+	
+	//Write a World impl when it becomes more solid
+	public float getWorldHeight() {
+		return mGridHeight;
+	}
+	
+	public float getWorldWidth() {
+		return mGridWidth;
 	}
 }

@@ -5,19 +5,17 @@ import android.graphics.RectF;
 
 //TODO Work on this
 public class Box {
-
+	
 	private RectF box;
+	private static final float BOUNDSIZE = 5;
+	
 	private int color;
 	private int alpha;
-	
-	//TODO animations
-	private boolean isAnimating;
 	
 	public Box(float left, float right, float top, float bottom, int color, int alpha) {
 		box = new RectF(left, top, right, bottom);
 		this.color = color;
 		this.alpha = alpha;
-		isAnimating = false;
 	}
 	
 	public Box(float left, float right, float top, float bottom, int color) {
@@ -30,6 +28,22 @@ public class Box {
 		box = new RectF(left, top, right, bottom);
 		color = Color.rgb((int) (Math.random() * 255), (int) (Math.random() * 255), (int) (Math.random() * 255));
 		alpha = 255;
+	}
+	
+	public int getColor() {
+		return color;
+	}
+	
+	public void setColor(int color) {
+		this.color = color;
+	}
+	
+	public int getAlpha() {
+		return alpha;
+	}
+	
+	public void setAlpha(int alpha) {
+		this.alpha = alpha;
 	}
 	
 	public float getTop() {
@@ -48,6 +62,23 @@ public class Box {
 		return box.right;
 	}
 	
+	//Consider doing the bounding differently
+	public float getBoundTop() {
+		return box.top + BOUNDSIZE;
+	}
+	
+	public float getBoundBottom() {
+		return box.bottom + BOUNDSIZE;
+	}
+	
+	public float getBoundLeft() {
+		return box.left + BOUNDSIZE;
+	}
+	
+	public float getBoundRight() {
+		return box.right + BOUNDSIZE;
+	}
+	
 	public float getCenterX() {
 		return box.centerX();
 	}
@@ -58,5 +89,12 @@ public class Box {
 	
 	public RectF getBox() {
 		return box;
+	}
+	
+	//Do this differently
+	public RectF getBoundBox() {
+		RectF boundBox = new RectF(box);
+		boundBox.inset(BOUNDSIZE, BOUNDSIZE);
+		return boundBox;
 	}
 }
