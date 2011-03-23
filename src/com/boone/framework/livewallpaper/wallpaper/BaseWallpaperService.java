@@ -72,6 +72,7 @@ public abstract class BaseWallpaperService extends WallpaperService {
 			setTouchEventsEnabled(true); // user set property.
 
 			mStartTime = SystemClock.elapsedRealtime();
+			mVisible = true;
 			mWorld.onCreate(this);
 			mRenderer.onCreate(this);
 		}
@@ -90,6 +91,7 @@ public abstract class BaseWallpaperService extends WallpaperService {
 
 		@Override public void onSurfaceChanged(SurfaceHolder holder, int format, int width, int height) {
 			super.onSurfaceChanged(holder, format, width, height);
+			queueStep();
 			// should world get this ?
 		}
 
@@ -97,6 +99,7 @@ public abstract class BaseWallpaperService extends WallpaperService {
 			mVisible = visible;
 			// maybe run a step
 			if (mVisible) {
+				queueStep();
 				drawFrame();
 			}
 		}
@@ -106,6 +109,7 @@ public abstract class BaseWallpaperService extends WallpaperService {
 			mOffsetX = xPixels;
 
 			mWorld.step();
+			queueStep();
 			drawFrame();
 		}
 

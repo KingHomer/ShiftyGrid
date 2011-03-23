@@ -38,6 +38,10 @@ public class Box {
 		this.color = color;
 	}
 	
+	public int getARGB() {
+		return Color.argb(alpha, Color.red(color), Color.green(color), Color.blue(color));
+	}
+	
 	public int getAlpha() {
 		return alpha;
 	}
@@ -87,12 +91,18 @@ public class Box {
 		return box.centerY();
 	}
 	
+	public void setCenter(float x, float y) {
+		float size = ((box.right - box.left) / 2);
+		box.set(x - size, y + size, x + size, y - size);
+	}
+	
 	public RectF getBox() {
 		return box;
 	}
 	
 	//Do this differently
 	public RectF getBoundBox() {
+		//TODO cost waayy to much.  Too expensive to move two boxes when animating.
 		RectF boundBox = new RectF(box);
 		boundBox.inset(BOUNDSIZE, BOUNDSIZE);
 		return boundBox;

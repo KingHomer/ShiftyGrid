@@ -1,16 +1,18 @@
 package com.boone.livewallpaper.reshift;
 
+import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
+import java.util.logging.Logger;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 
 import com.boone.framework.livewallpaper.renderer.Renderer;
 import com.boone.framework.livewallpaper.wallpaper.WallpaperEngine;
 import com.boone.livewallpaper.reshift.ReShiftWallpaperService.ReShiftEngine;
-import com.boone.livewallpaper.shiftygrid.ShiftyBox;
+import com.boone.livewallpaper.reshift.grid.ShiftyBox;
 
 public class ShiftyRenderer implements Renderer {
 
@@ -39,29 +41,26 @@ public class ShiftyRenderer implements Renderer {
 		c.drawColor(0xff000000);
 
 		//TODO redo .. probably wont work
-		List<ShiftyBox> boxes = world.getBoxes();
+		Collection<ShiftyBox> boxes = world.getBoxes();
 
 		RectF rect = null;
 		for (Iterator<ShiftyBox> i = boxes.iterator(); i.hasNext();) {
 			ShiftyBox box = i.next();
 
-			if (!box.isActive) {
+			if (box.getLeft() > (engine.getScreenOffset() + engine.getScreenWidth())) {
 				continue;
 			}
 
-			if (box.left > (engine.getScreenOffset() + engine.getScreenWidth())) {
-				continue;
-			}
-
-			if (box.right < -engine.getScreenOffset()) {
+			if (box.getRight() < -engine.getScreenOffset()) {
 				continue;
 			}
 
 			mPaint.setColor(box.getARGB());
-			rect = new RectF(box.left, box.top, box.right, box.bottom);
+			//rect = new RectF(box.left, box.top, box.right, box.bottom);
+			rect = box.getBox();
 
-			rect.offsetTo(box.left + engine.getScreenOffset(), box.top);
-			c.drawRoundRect(rect, 0.0f, 0.0f, mPaint);
+			rect.offsetTo(box.getLeft() + engine.getScreenOffset(), box.getTop());
+			c.drawRect(rect, mPaint);
 		}
 
 		c.restore();

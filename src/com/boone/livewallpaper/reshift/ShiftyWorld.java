@@ -2,7 +2,10 @@ package com.boone.livewallpaper.reshift;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Stack;
+
+import android.graphics.RectF;
 
 import com.boone.framework.livewallpaper.wallpaper.WallpaperEngine;
 import com.boone.framework.livewallpaper.world.World;
@@ -11,22 +14,25 @@ import com.boone.livewallpaper.reshift.grid.ShiftyBox;
 
 public class ShiftyWorld implements World {
 
+	private static long BOX_BUILD_TIMER = 500;
+	
 	private ReShiftEngine engine;
 
 	//Changing this around
 	private Collection<ShiftyBox> activeBoxes;
 	private Stack<ShiftyBox> availableBoxes;
+	private ShiftyBox shiftingBox;
+	
+	private long lastBoxBuildTime;
+	private long lastBoxShiftTime;
 	
 	private int activeBoxCount;
 	private int maxNumBoxes;
 
-	// dimensions
 	private float mGridHeight;
 	private float mGridWidth;
+	private RectF mGrid;
 	private float boxSideLength;
-	
-	private long lastBoxBuildTime;
-	private long lastBoxShiftTime;
 
 	public ShiftyWorld() {
 		// init
@@ -44,24 +50,24 @@ public class ShiftyWorld implements World {
 	}
 
 	@Override public void step() {
-		/*
-		 * check time
-		 * if build time
-		 * 		if room available
-		 * 			build box
-		 * if shift time
-		 * 		if shiftable box available
-		 * 			shift box
-		 * 
-		 */
+		if(engine.getElapsedTime() - lastBoxBuildTime > BOX_BUILD_TIMER) {
+			activateBox();
+			lastBoxBuildTime = engine.getElapsedTime();
+		}
+		
+		//if(shiftingBox.getMoveState() > 0) {
+			
+		//}
 	}
 	
 	private void initGrid() {
 		mGridHeight = this.engine.getScreenHeight();
 		mGridWidth = 2 * this.engine.getScreenWidth();
 		
+		mGrid = new RectF(0, 0, mGridWidth, mGridHeight);
+		
 		activeBoxCount = 0;
-		boxSideLength = gcd(mGridWidth, mGridHeight) / 2;  //Change this to make the boxes much smaller
+		boxSideLength = gcd(mGridWidth, mGridHeight) / 8;  //Change this to make the boxes much smaller
 		availableBoxes = new Stack<ShiftyBox>();
 		activeBoxes = new ArrayList<ShiftyBox>();
 		maxNumBoxes = findMaxBoxes();
@@ -70,6 +76,41 @@ public class ShiftyWorld implements World {
 		for(int x = 0; x < maxNumBoxes - 25; x++) {
 			availableBoxes.add(new ShiftyBox(boxSideLength));
 		}
+		
+		lastBoxBuildTime = 0;
+		lastBoxShiftTime = 0;
+	}
+	
+	public void activateBox() {
+		ShiftyBox nextBox = availableBoxes.pop();
+		nextBox.active(true);
+		placeBox(nextBox);
+		activeBoxes.add(nextBox);
+	}
+	
+	public void killBox(ShiftyBox deadBox) {
+		deadBox.active(false);
+		activeBoxes.remove(deadBox);
+		availableBoxes.add(deadBox);
+	}
+	
+	private boolean placeBox(ShiftyBox box) {
+		int randX = (int)(Math.random() * mGridWidth);
+		int randY = (int)(Math.random() * mGridHeight);
+		
+		box.setCenter(randX, randY);
+		return checkCollision(box) ? true : placeBox(box);
+	}
+	
+	private boolean checkCollision(ShiftyBox box) {
+		for(Iterator<ShiftyBox> boxes = activeBoxes.iterator(); boxes.hasNext(); ) {
+			ShiftyBox activeBox = boxes.next();
+			if(RectF.intersects(box.getBoundBox(), activeBox.getBoundBox())) {
+				return true;
+			}
+		}
+		
+		return RectF.intersects(mGrid, box.getBoundBox()) ? true : false;
 	}
 
 	public Collection<ShiftyBox> getBoxes() {

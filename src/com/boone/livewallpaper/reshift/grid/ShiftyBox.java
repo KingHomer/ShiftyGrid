@@ -5,7 +5,7 @@ import com.boone.framework.livewallpaper.world.shapes.Box;
 public class ShiftyBox extends Box {
 
 	public ShiftyBox(float size) {
-		super(size, size, size, size);
+		super(-size, size, size, -size);
 		moveState = NOTMOVING;
 		isActive = false;
 	}

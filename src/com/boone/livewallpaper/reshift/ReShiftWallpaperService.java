@@ -7,6 +7,7 @@ import com.boone.framework.livewallpaper.world.World;
 public class ReShiftWallpaperService extends BaseWallpaperService{
 
 	@Override protected AbstractWallpaperEngine getEngine() {
+		android.os.Debug.waitForDebugger();
 		return new ReShiftEngine();
 	}
 	
