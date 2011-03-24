@@ -43,7 +43,6 @@ public class ShiftyRenderer implements Renderer {
 		//TODO redo .. probably wont work
 		Collection<ShiftyBox> boxes = world.getBoxes();
 
-		RectF rect = null;
 		for (Iterator<ShiftyBox> i = boxes.iterator(); i.hasNext();) {
 			ShiftyBox box = i.next();
 
@@ -57,7 +56,8 @@ public class ShiftyRenderer implements Renderer {
 
 			mPaint.setColor(box.getARGB());
 			//rect = new RectF(box.left, box.top, box.right, box.bottom);
-			rect = box.getBox();
+			//Moving the canvas might be cheaper.
+			RectF rect = new RectF(box.getBox());
 
 			rect.offsetTo(box.getLeft() + engine.getScreenOffset(), box.getTop());
 			c.drawRect(rect, mPaint);

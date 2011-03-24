@@ -93,6 +93,7 @@ public class Box {
 	
 	public void setCenter(float x, float y) {
 		float size = ((box.right - box.left) / 2);
+		//box.set(x - size, y - size, x + size, y + size);
 		box.set(x - size, y + size, x + size, y - size);
 	}
 	
