@@ -1,21 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="com.boone.shiftygrid"
-      android:versionCode="1"
-      android:versionName="1.0">
-    <application android:icon="@drawable/icon"
-    			android:debuggable="true" 
-    			android:label="@string/app_name" android:description="@string/app_description">
-		<service android:name="ShiftyGridWallpaper" 
-    		 android:permission="android.permission.BIND_WALLPAPER" 
-    		 android:label="ShiftyGridWallpaper">
-    		
-    		<intent-filter>
-            	    <action android:name="android.service.wallpaper.WallpaperService" />
-        	</intent-filter>
-			<meta-data android:name="android.service.wallpaper" android:resource="@xml/grid1" />
-	    </service>
-    </application>
-    <uses-sdk android:minSdkVersion="7" />
-    <uses-feature android:name="android.software.live_wallpaper" />
+	package="com.boone.shiftygrid" android:versionCode="1"
+	android:versionName="1.0">
+	<application android:icon="@drawable/icon"
+		android:debuggable="true" android:label="@string/app_name"
+		android:description="@string/app_description">
+		<service android:name="com.boone.livewallpaper.shiftygrid.ShiftyGridWallpaper"
+			android:permission="android.permission.BIND_WALLPAPER" android:label="ShiftyGridWallpaper">
+
+			<intent-filter>
+				<action android:name="android.service.wallpaper.WallpaperService" />
+			</intent-filter>
+			<meta-data android:name="android.service.wallpaper"
+				android:resource="@xml/grid1" />
+		</service>
+		<service android:name="com.boone.livewallpaper.reshift.ReShiftWallpaperService"
+			android:label="ReShift" android:permission="android.permission.BIND_WALLPAPER">
+
+			<intent-filter>
+				<action android:name="android.service.wallpaper.WallpaperService" />
+			</intent-filter>
+			<meta-data android:name="android.service.wallpaper"
+				android:resource="@xml/grid1" />
+		</service>
+	</application>
+	<uses-sdk android:minSdkVersion="7" />
+	<uses-feature android:name="android.software.live_wallpaper" />
 </manifest> 
