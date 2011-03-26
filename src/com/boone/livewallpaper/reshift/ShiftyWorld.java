@@ -96,23 +96,30 @@ public class ShiftyWorld implements World {
 		availableBoxes.add(deadBox);
 	}
 
-	private boolean placeBox(ShiftyBox box) {
+	private void placeBox(ShiftyBox box) {
 		int randX = (int) (Math.random() * mGridWidth);
 		int randY = (int) (Math.random() * mGridHeight);
 
 		box.setCenter(randX, randY);
-		return checkCollision(box) ? true : placeBox(box);
+		boolean checkCol = checkCollision(box);
+		if(checkCol) {
+			placeBox(box);
+		}
 	}
 
 	private boolean checkCollision(ShiftyBox box) {
 		for (Iterator<ShiftyBox> boxes = activeBoxes.iterator(); boxes.hasNext();) {
 			ShiftyBox activeBox = boxes.next();
-			if (RectF.intersects(box.getBoundBox(), activeBox.getBoundBox()) || box.getBoundBox().contains(activeBox.getBox())) {
+			if (RectF.intersects(box.getBoundBox(), activeBox.getBoundBox()) || activeBox.getBoundBox().contains(box.getBoundBox())) {
 				return true;
 			}
 		}
 
-		return RectF.intersects(mGrid, box.getBoundBox()) || !mGrid.contains(box.getBox()) ? true : false;
+		//return RectF.intersects(mGrid, box.getBoundBox()) || !mGrid.contains(box.getBox()) ? true : false;
+		if(RectF.intersects(mGrid, box.getBoundBox()) || !mGrid.contains(box.getBoundBox())) {
+			return true;
+		}
+		return false;
 	}
 
 	public Collection<ShiftyBox> getBoxes() {

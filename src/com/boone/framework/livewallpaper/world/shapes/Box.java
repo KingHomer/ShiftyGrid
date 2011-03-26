@@ -103,9 +103,9 @@ public class Box {
 	
 	//Do this differently
 	public RectF getBoundBox() {
-		//TODO cost waayy to much.  Too expensive to move two boxes when animating.
-		RectF boundBox = new RectF(box);
-		boundBox.inset(BOUNDSIZE, BOUNDSIZE);
+		//RectF boundBox = new RectF(box);
+		RectF boundBox = new RectF(getBoundLeft(), getBoundTop(), getBoundRight(), getBoundBottom());
+		//boundBox.inset(BOUNDSIZE, BOUNDSIZE);
 		return boundBox;
 	}
 }
