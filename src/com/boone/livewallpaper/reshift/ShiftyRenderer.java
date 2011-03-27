@@ -42,7 +42,6 @@ public class ShiftyRenderer implements Renderer {
 
 		//TODO redo .. probably wont work
 		Collection<ShiftyBox> boxes = world.getBoxes();
-
 		for (Iterator<ShiftyBox> i = boxes.iterator(); i.hasNext();) {
 			ShiftyBox box = i.next();
 

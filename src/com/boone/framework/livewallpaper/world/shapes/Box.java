@@ -68,7 +68,7 @@ public class Box {
 	
 	//Consider doing the bounding differently
 	public float getBoundTop() {
-		return box.top + BOUNDSIZE;
+		return box.top - BOUNDSIZE;
 	}
 	
 	public float getBoundBottom() {
@@ -76,7 +76,7 @@ public class Box {
 	}
 	
 	public float getBoundLeft() {
-		return box.left + BOUNDSIZE;
+		return box.left - BOUNDSIZE;
 	}
 	
 	public float getBoundRight() {

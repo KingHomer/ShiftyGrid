@@ -62,7 +62,7 @@ public class ShiftyWorld implements World {
 
 	private void initGrid() {
 		mGridHeight = this.engine.getScreenHeight();
-		mGridWidth = 2 * this.engine.getScreenWidth();
+		mGridWidth = this.engine.getScreenWidth();
 
 		mGrid = new RectF(0, 0, mGridWidth, mGridHeight);
 
@@ -102,7 +102,7 @@ public class ShiftyWorld implements World {
 
 		box.setCenter(randX, randY);
 		boolean checkCol = checkCollision(box);
-		if(checkCol) {
+		if (checkCol == false) {
 			placeBox(box);
 		}
 	}

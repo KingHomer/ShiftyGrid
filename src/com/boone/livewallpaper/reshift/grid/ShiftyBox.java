@@ -4,8 +4,11 @@ import com.boone.framework.livewallpaper.world.shapes.Box;
 
 public class ShiftyBox extends Box {
 
+	//Refactor grid sizing to be static.
+	private static float BOXSIZE = 20;
+	
 	public ShiftyBox(float size) {
-		super(-size, size, size, -size);
+		super(0, 0, size, size);
 		moveState = NOTMOVING;
 		isActive = false;
 	}
@@ -38,5 +41,12 @@ public class ShiftyBox extends Box {
 	
 	public void active(boolean isActive) {
 		this.isActive = isActive;
+	}
+	
+	@Override public void setCenter(float x, float y) {
+		getBox().bottom = y + BOXSIZE;
+		getBox().top = y - BOXSIZE;
+		getBox().right = x + BOXSIZE;
+		getBox().left = x - BOXSIZE;
 	}
 }
