@@ -38,18 +38,21 @@ public class ShiftyWorld implements World {
 		// init
 	}
 
-	@Override public void onCreate(WallpaperEngine engine) {
+	@Override
+	public void onCreate(WallpaperEngine engine) {
 		this.engine = (ReShiftEngine) engine;
 		initGrid();
 	}
 
-	@Override public void onDestroy() {
+	@Override
+	public void onDestroy() {
 		// need to clean house more.
 		availableBoxes.removeAllElements();
 		activeBoxes.clear();
 	}
 
-	@Override public void step() {
+	@Override
+	public void step() {
 		if (engine.getElapsedTime() - lastBoxBuildTime > BOX_BUILD_TIMER) {
 			activateBox();
 			lastBoxBuildTime = engine.getElapsedTime();
@@ -68,8 +71,8 @@ public class ShiftyWorld implements World {
 
 		activeBoxCount = 0;
 		boxSideLength = gcd(mGridWidth, mGridHeight) / 8; // Change this to make
-															// the boxes much
-															// smaller
+		// the boxes much
+		// smaller
 		availableBoxes = new Stack<ShiftyBox>();
 		activeBoxes = new ArrayList<ShiftyBox>();
 		maxNumBoxes = findMaxBoxes();
@@ -94,6 +97,7 @@ public class ShiftyWorld implements World {
 		deadBox.active(false);
 		activeBoxes.remove(deadBox);
 		availableBoxes.add(deadBox);
+		
 	}
 
 	private void placeBox(ShiftyBox box) {
@@ -102,23 +106,47 @@ public class ShiftyWorld implements World {
 
 		box.setCenter(randX, randY);
 		boolean checkCol = checkCollision(box);
-		if (checkCol == false) {
-			placeBox(box);
+		if (checkCol == true) {
+			//placeBox(box);
 		}
 	}
 
 	private boolean checkCollision(ShiftyBox box) {
-		for (Iterator<ShiftyBox> boxes = activeBoxes.iterator(); boxes.hasNext();) {
+		// for (Iterator<ShiftyBox> boxes = activeBoxes.iterator();
+		// boxes.hasNext();) {
+		// ShiftyBox activeBox = boxes.next();
+		// if (RectF.intersects(box.getBoundBox(), activeBox.getBoundBox()) ||
+		// activeBox.getBoundBox().contains(box.getBoundBox())) {
+		// return true;
+		// }
+		// }
+		//
+		// //return RectF.intersects(mGrid, box.getBoundBox()) ||
+		// !mGrid.contains(box.getBox()) ? true : false;
+		// if(RectF.intersects(mGrid, box.getBoundBox()) ||
+		// !mGrid.contains(box.getBoundBox())) {
+		// return true;
+		// }
+		// return false;
+		if (RectF.intersects(mGrid, box.getBox())) {
+			return true;
+		}
+
+		if (!mGrid.contains(box.getBox())) {
+			return true;
+		}
+		
+		for (Iterator<ShiftyBox> boxes = activeBoxes.iterator(); boxes
+				.hasNext();) {
 			ShiftyBox activeBox = boxes.next();
-			if (RectF.intersects(box.getBoundBox(), activeBox.getBoundBox()) || activeBox.getBoundBox().contains(box.getBoundBox())) {
+			if (RectF.intersects(box.getBoundBox(), activeBox.getBoundBox())) {
+				return true;
+			}
+			if (activeBox.getBox().contains(box.getBox())) {
 				return true;
 			}
 		}
 
-		//return RectF.intersects(mGrid, box.getBoundBox()) || !mGrid.contains(box.getBox()) ? true : false;
-		if(RectF.intersects(mGrid, box.getBoundBox()) || !mGrid.contains(box.getBoundBox())) {
-			return true;
-		}
 		return false;
 	}
 

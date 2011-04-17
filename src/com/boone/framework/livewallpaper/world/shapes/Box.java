@@ -7,6 +7,7 @@ import android.graphics.RectF;
 public class Box {
 	
 	private RectF box;
+	private RectF boundBox;
 	private static final float BOUNDSIZE = 5;
 	
 	private int color;
@@ -103,9 +104,9 @@ public class Box {
 	
 	//Do this differently
 	public RectF getBoundBox() {
-		//RectF boundBox = new RectF(box);
-		RectF boundBox = new RectF(getBoundLeft(), getBoundTop(), getBoundRight(), getBoundBottom());
-		//boundBox.inset(BOUNDSIZE, BOUNDSIZE);
+		if(boundBox == null) {
+			boundBox = new RectF(getBoundLeft(), getBoundTop(), getBoundRight(), getBoundBottom());
+		}
 		return boundBox;
 	}
 }
